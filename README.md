@@ -1,6 +1,6 @@
 # Hive Docker Builder
 
-Dockerfile setup to install various versions of Hadoop in a minimalist
+Dockerfile setup to install various versions of Hive in a minimalist
 environment.
 
 The Java version `JAVA_VERSION` defaults to 8, while both `HADOOP_VERSION` and
