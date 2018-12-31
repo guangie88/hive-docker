@@ -1,9 +1,9 @@
 # Debian based
 ARG JAVA_VERSION=8
-ARG HADOOP_VERSION="2.7.7"
+ARG HADOOP_VERSION=
 FROM guangie88/hadoop:${HADOOP_VERSION}_java-${JAVA_VERSION}
 
-ARG HIVE_VERSION="2.3.4"
+ARG HIVE_VERSION=
 
 ENV HIVE_NAME "hive-${HIVE_VERSION}"
 ENV HIVE_DIR "/opt/${HIVE_NAME}"
@@ -20,7 +20,8 @@ RUN set -eux; \
         # Build-time only deps
         wget \
         # Required deps
-        mysql-server libmysql-java \
+        libmysql-java \
+        libpostgresql-jdbc-java \
         procps; \
     #
     # Hadoop installation
@@ -32,6 +33,7 @@ RUN set -eux; \
     rm ${PACKAGE_NAME}; \
     ln -s ${HIVE_DIR} ${HIVE_HOME}; \
     ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar; \
+    ln -s /usr/share/java/postgresql-jdbc4.jar $HIVE_HOME/lib/postgresql-jdbc4.jar; \
     #
     # Remove unnecessary build-time only dependencies
     #
