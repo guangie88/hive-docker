@@ -56,10 +56,11 @@ before_script:
 - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
 
 script:
-- TAG_NAME="${HIVE_VERSION}_java-${JAVA_VERSION}"
+- TAG_NAME="${HIVE_VERSION}"
 - FULL_IMAGE_NAME="${IMAGE_NAME}:${TAG_NAME}"
 - |
   docker build . \
+    --build-arg HADOOP_VERSION="${HADOOP_VERSION}" \
     --build-arg HIVE_VERSION="${HIVE_VERSION}" \
     -t ${FULL_IMAGE_NAME}
 
