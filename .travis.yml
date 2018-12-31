@@ -1,0 +1,78 @@
+language: bash
+
+env:
+  global:
+  - IMAGE_NAME=${DOCKER_USERNAME}/hadoop
+  - JAVA_VERSION=8
+
+matrix:
+  include:
+  - services: docker
+    env:
+    - HIVE_VERSION=2.1.0
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.1.1
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.2.0
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.3.0
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.3.1
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.3.2
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.3.3
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=2.3.4
+    - HADOOP_VERSION=2.7.7
+  - services: docker
+    env:
+    - HIVE_VERSION=3.0.0
+    - HADOOP_VERSION=3.0.3
+  - services: docker
+    env:
+    - HIVE_VERSION=3.1.0
+    - HADOOP_VERSION=3.0.3
+  - services: docker
+    env:
+    - HIVE_VERSION=3.1.1
+    - HADOOP_VERSION=3.0.3
+  
+before_script:
+- docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+
+script:
+- TAG_NAME="${HIVE_VERSION}"
+- FULL_IMAGE_NAME="${IMAGE_NAME}:${TAG_NAME}"
+- |
+  docker build . \
+    --build-arg HADOOP_VERSION="${HADOOP_VERSION}" \
+    --build-arg HIVE_VERSION="${HIVE_VERSION}" \
+    -t ${FULL_IMAGE_NAME}
+
+after_success:
+- |
+  docker run --rm ${FULL_IMAGE_NAME} \
+    hive --version
+- |  
+  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    docker push ${FULL_IMAGE_NAME};
+  fi
+
+branches:
+  only:
+  - master
