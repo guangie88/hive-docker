@@ -2,7 +2,7 @@ language: bash
 
 env:
   global:
-  - IMAGE_NAME=${DOCKER_USERNAME}/hadoop
+  - IMAGE_NAME=${DOCKER_USERNAME}/hive
   - JAVA_VERSION=8
 
 matrix:
